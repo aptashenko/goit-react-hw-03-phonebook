@@ -1,41 +1,52 @@
 import React from "react";
 import ContactForm from "./ContactForm/ContactForm";
 import ContactList from "./ContactList/ContactList";
-import { nanoid } from 'nanoid';
 import Title from "./Title/Title";
+import Filter from "./Filter/Filter";
+import ContactItem from "./ContactItem/ContactItem";
 
 class App extends React.Component {
   state = {
-    contacts: [],
+    contacts: [
+      {id: 'id-1', name: 'Rosie Simpson', number: '459-12-56'},
+      {id: 'id-2', name: 'Hermione Kline', number: '443-89-12'},
+      {id: 'id-3', name: 'Eden Clements', number: '645-17-79'},
+      {id: 'id-4', name: 'Annie Copeland', number: '227-91-26'},
+    ],
     filter: '',
-    name: '',
-    number: '',
   }
 
-  handleContactForm = (e) => {
-    e.preventDefault();
-    const data = new FormData();
-    data.id = nanoid();
-    data.name = e.target[0].value;
-    data.number = e.target[1].value;
-    this.setState(prevState => ({
-      contacts: [...prevState.contacts, data],
-    }))
-    e.target.reset();
+  handleContactForm = (data) => {
+    this.state.contacts.some(contact => contact.name === data.name) ? alert(`${data.name} is alredy in contacts`) : this.setState(prevState => ({ contacts: [...prevState.contacts, data]}))
+  }
+
+  handleFilter = (e) => {
+    this.setState(({ filter: e.target.value }));
+  }
+
+  deleteContact = (id) => {
+    const newContacts = this.state.contacts.filter(contact => contact.id !== id)
+    this.setState({
+      contacts: newContacts,
+    })
   }
 
   render() {
-    const { contacts } = this.state;
-    const { handleContactForm } = this;
+    const { handleContactForm, handleFilter, deleteContact } = this;
+    const normalizerFilter = this.state.filter.toLowerCase();
+    const filteredContacts = this.state.contacts.filter(contact => contact.name.toLowerCase().includes(normalizerFilter))
     return (
-      <>
+      <div className="wrapper">
         <Title title='PhoneBook'>
           <ContactForm handleContactForm={handleContactForm} />
         </Title>
         <Title title='Contacts'>
-          <ContactList contacts={contacts} />
+          <Filter onChange={handleFilter} />
+          <ContactList>
+            <ContactItem contacts={filteredContacts} deleteContact={deleteContact} />
+          </ContactList>
         </Title>
-      </>
+      </div>
     )
   }
 }

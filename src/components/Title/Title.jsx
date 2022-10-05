@@ -1,4 +1,5 @@
-import css from './title.module.css'
+import css from './title.module.css';
+import PropTypes from 'prop-types';
 
 const Title = ({ title, children }) => (
     <div className={css.container}>
@@ -6,5 +7,9 @@ const Title = ({ title, children }) => (
         {children}
     </div>
 )
+
+Title.propTypes = {
+    title: PropTypes.string,
+}
 
 export default Title;
