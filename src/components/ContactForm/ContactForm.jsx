@@ -10,7 +10,7 @@ class ContactForm extends React.Component {
 
     addContact = (e) => {
         e.preventDefault();
-        const data = new FormData();
+        const data = {};
         data.id = nanoid();
         data.name = e.target[0].value;
         data.number = e.target[1].value;
