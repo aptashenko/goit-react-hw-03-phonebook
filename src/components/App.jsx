@@ -44,6 +44,7 @@ class App extends React.Component {
     this.setState({
       contacts: newContacts,
     })
+    this.addToLocalStorage('contacts', [...newContacts]);
   }
 
   render() {
