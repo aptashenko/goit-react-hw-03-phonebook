@@ -21,18 +21,23 @@ class App extends React.Component {
     parsedLocalStorage && this.setState(({ contacts: parsedLocalStorage }));
   }
 
+  componentDidUpdate(_, prevState) {
+    if (this.state.contacts !== prevState.contacts) {
+      this.updateLocalStorage(this.state.contacts);
+    }
+  }
+
   handleContactForm = (data) => {
     const isContactExist = this.state.contacts.some(contact => contact.name === data.name);
     if (isContactExist) {
       alert(`${data.name} is alredy in contacts`)
     } else {
       this.setState(prevState => ({ contacts: [...prevState.contacts, data] }));
-      this.addToLocalStorage('contacts', [...this.state.contacts, data]);
     }
   }
 
-  addToLocalStorage = (key, data) => {
-    localStorage.setItem(key, JSON.stringify(data));
+  updateLocalStorage = (data) => {
+    localStorage.setItem('contacts', JSON.stringify(data));
   }
 
   handleFilter = (e) => {
@@ -44,7 +49,6 @@ class App extends React.Component {
     this.setState({
       contacts: newContacts,
     })
-    this.addToLocalStorage('contacts', [...newContacts]);
   }
 
   render() {
