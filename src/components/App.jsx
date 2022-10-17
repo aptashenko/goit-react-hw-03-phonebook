@@ -17,13 +17,15 @@ class App extends React.Component {
   }
 
   componentDidMount() {
-    const parsedLocalStorage = JSON.parse(localStorage.getItem('contacts'));
-    parsedLocalStorage && this.setState(({ contacts: parsedLocalStorage }));
+    const localStorageContacts = localStorage.getItem('contacts');
+    localStorageContacts && this.setState(({
+      contacts: JSON.parse(localStorage.getItem('contacts'))
+    }));;
   }
 
   componentDidUpdate(_, prevState) {
     if (this.state.contacts !== prevState.contacts) {
-      this.updateLocalStorage(this.state.contacts);
+      localStorage.setItem('contacts', JSON.stringify(this.state.contacts));
     }
   }
 
@@ -36,9 +38,6 @@ class App extends React.Component {
     }
   }
 
-  updateLocalStorage = (data) => {
-    localStorage.setItem('contacts', JSON.stringify(data));
-  }
 
   handleFilter = (e) => {
     this.setState(({ filter: e.target.value }));
